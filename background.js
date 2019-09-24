@@ -19,8 +19,7 @@ function initialize_storage() {
 /// Executed when this extension is installed.
 chrome.runtime.onInstalled.addListener(function () {
   chrome.storage.sync.get("term_start_date", function(data) {
-    let start_date = data.term_start_date;
-    if (start_date.yyyy == null || start_date.mm == null || start_date.dd == null) {
+    if (data.term_start_date) {
       initialize_storage();
     }
   });

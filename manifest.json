@@ -2,31 +2,31 @@
   "name": "SEU Master Course Exporter",
   "version": "0.1",
   "description": "An extension that helps export SEU master course to .ics file.",
-  "permissions": ["storage"],
+  "permissions": ["storage", "activeTab"],
   "background": {
-    "scripts": ["background.js", "shared_contents.js"],
+    "scripts": ["background.js"],
     "persistent": false
   },
   "content_scripts": [
     {
-      "matches": ["*://*/*"],
-      "js": ["shared_contents.js"]
+      "matches": ["*://yjsxk.urp.seu.edu.cn/*"],
+      "js": ["content_script.js", "ics.dep.min.js", "ics.min.js"]
     }
   ],
   "options_page": "options.html",
   "page_action": {
     "default_icon": {
-      "16": "images/get_started16.png",
-      "32": "images/get_started32.png",
-      "48": "images/get_started48.png",
-      "128": "images/get_started128.png"
+      "16": "images/seu-course16.png",
+      "32": "images/seu-course32.png",
+      "48": "images/seu-course48.png",
+      "128": "images/seu-course128.png"
     }
   },
   "icons": {
-    "16": "images/get_started16.png",
-    "32": "images/get_started32.png",
-    "48": "images/get_started48.png",
-    "128": "images/get_started128.png"
+    "16": "images/seu-course16.png",
+    "32": "images/seu-course32.png",
+    "48": "images/seu-course48.png",
+    "128": "images/seu-course128.png"
   },
   "manifest_version": 2
 }
