@@ -14,6 +14,7 @@ function construct_submit_button(append_position, id, callback) {
   let submit_button = document.createElement("button");
   submit_button.id = id;
   submit_button.name = id;
+  submit_button.innerHTML = "Submit";
   option_page.appendChild(submit_button);
   submit_button.addEventListener("click", callback);
 }
