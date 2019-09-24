@@ -106,14 +106,22 @@ function submit_button_cb() {
 function construct_page() {
   chrome.storage.sync.get("term_start_date", function(data) {
     let start_date = data.term_start_date;
-    if (start_date.yyyy == null || start_date.mm == null || start_date.dd == null) {
+    console.log(data);
+    if (start_date == null) {
       initialize_storage();
     }
+    // if (start_date.yyyy == null || start_date.mm == null || start_date.dd == null) {
+    //   initialize_storage();
+    // }
+  });
+
+  chrome.storage.sync.get("term_start_date", function(data) {
+    let start_date = data.term_start_date;
 
     construct_input_field(option_page, "yyyy", start_date.yyyy);
     construct_input_field(option_page, "mm", start_date.mm);
     construct_input_field(option_page, "dd", start_date.dd);
-
+  
     construct_submit_button(option_page, "submit_button", submit_button_cb);
   });
 }

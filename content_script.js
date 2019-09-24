@@ -3,6 +3,15 @@
 
 let SCHEDULE_URL = "http://yjsxk.urp.seu.edu.cn/yjsxkapp/sys/xsxkapp/xsxkCourse/loadKbxx.do"
 
+/// Read the date of first week.
+function read_date_of_first_week() {
+  let yyyy = 0;
+  let mm = 0;
+  let dd = 0;
+
+  return new Date("2019-09-02T00:00");
+}
+
 /// Read course information.
 /// struct {
 ///   course_name: KCMC (课程名称)
@@ -11,16 +20,23 @@ let SCHEDULE_URL = "http://yjsxk.urp.seu.edu.cn/yjsxkapp/sys/xsxkapp/xsxkCourse/
 ///   begin_time: KSSJ (上课时间)
 ///   end_time: JSSJ (下课时间)
 ///   prof_name: JSXM (教授姓名)
-///   course_period: ZCBH (我也不知道怎么翻译) 01111100000000000 表示 2-6 周上课
+///   course_period: ZCBH (我也不知道这是什么鬼拼音) 01111100000000000 表示 2-6 周上课
 ///   week: XQ (星期几)
 /// }
 function read_course_info(course) {
+  function pad(num, size){ return ("000000000" + num).substr(-size); }
+  
+  let start_time = pad(course.KSSJ, 4);
+  let end_time = pad(course.JSSJ, 4);
+
   let course_info = {
     course_name: course.KCMC,
     class_name: course.BJMC,
     position: course.JASMC,
-    begin_time: course.KSSJ,
-    end_time: course.JSSJ,
+    begin_time_hours: parseInt(start_time.substr(0, 2)),
+    begin_time_minutes: parseInt(start_time.substr(2, 2)),
+    end_time_hours: parseInt(end_time.substr(0, 2)),
+    end_time_minutes: parseInt(end_time.substr(2, 2)),
     prof_name: course.JSXM,
     course_period: course.ZCBH,
     week: course.XQ,
@@ -29,9 +45,54 @@ function read_course_info(course) {
   return course_info;
 }
 
+/// Add days to calculate next date.
+function add_days(date, days) {
+  let result = new Date(date);
+  result.setDate(result.getDate() + days);
+  return result;
+}
+
+/// Add hours to calculate next time.
+function add_hours(date, hours) {
+  let result = new Date(date);
+  result.setHours(result.getHours() + hours);
+  return result;
+}
+
+/// Add minutes to calculate next time.
+function add_minutes(date, minutes) {
+  let result = new Date(date);
+  result.setMinutes(result.getMinutes() + minutes);
+  return result;
+}
+
 /// Add course to schedule.
 function add_course_to_schedule(schedule, course_info) {
-  console.log(course_info);
+  let base_date = add_days(read_date_of_first_week(), course_info.week - 1);
+
+  let begin_time_hours = add_hours(base_date, course_info.begin_time_hours);
+  let begin_time_minutes = add_minutes(begin_time_hours, course_info.begin_time_minutes);
+
+  let end_time_hours = add_hours(base_date, course_info.end_time_hours);
+  let end_time_minutes = add_minutes(end_time_hours, course_info.end_time_minutes);
+  
+  // iterate over weeks.
+  for (let week = 0; week < course_info.course_period.length; week ++) {
+    let begin_time = add_days(begin_time_minutes, week * 7);
+    let end_time = add_days(end_time_minutes, week * 7);
+
+    if (course_info.course_period[week] == "1") {
+      schedule.addEvent(
+        /* Subject */ course_info.prof_name + "@" + course_info.course_name,
+        /* Description */"课程: " + course_info.course_name + "\n" +
+                         "地点: " + course_info.position + "\n" +
+                         "教师: " + course_info.prof_name + "\n" +
+                         "班级: " + course_info.class_name + "\n",
+        /* Position */course_info.position,
+        /* Start time */begin_time.toISOString(),
+        /* End time */end_time.toISOString());
+    }
+  }
 }
 
 /// Dump courses to `.ics` file.
@@ -48,7 +109,7 @@ function dump_to_ics_file(courses) {
     add_course_to_schedule(schedule, info);
   }
 
-  // schedule.download();
+  schedule.download();
 }
 
 /// Callback functions for click event of injected <a> tag.
