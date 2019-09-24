@@ -3,15 +3,6 @@
 
 let SCHEDULE_URL = "http://yjsxk.urp.seu.edu.cn/yjsxkapp/sys/xsxkapp/xsxkCourse/loadKbxx.do"
 
-/// Read the date of first week.
-function read_date_of_first_week() {
-  let yyyy = 0;
-  let mm = 0;
-  let dd = 0;
-
-  return new Date("2019-09-02T00:00");
-}
-
 /// Read course information.
 /// struct {
 ///   course_name: KCMC (课程名称)
@@ -67,8 +58,8 @@ function add_minutes(date, minutes) {
 }
 
 /// Add course to schedule.
-function add_course_to_schedule(schedule, course_info) {
-  let base_date = add_days(read_date_of_first_week(), course_info.week - 1);
+function add_course_to_schedule(schedule, date, course_info) {
+  let base_date = add_days(date, course_info.week - 1);
 
   let begin_time_hours = add_hours(base_date, course_info.begin_time_hours);
   let begin_time_minutes = add_minutes(begin_time_hours, course_info.begin_time_minutes);
@@ -103,13 +94,21 @@ function dump_to_ics_file(courses) {
   }
 
   let schedule = ics();
-  // schedule.addEvent('Demo Event', 'This is thirty minute event', 'Nome, AK', '2019-09-24T18:00', '2019-09-24T21:00');
-  for (let course of courses) {
-    let info = read_course_info(course);
-    add_course_to_schedule(schedule, info);
-  }
 
-  schedule.download();
+  chrome.storage.local.get("term_start_date", function (data) {
+    let term_start_date = data.term_start_date;
+    function pad(num, size){ return ("000000000" + num).substr(-size); }
+
+    for (let course of courses) {
+      let info = read_course_info(course);
+      add_course_to_schedule(schedule, new Date(
+        pad(term_start_date.yyyy, 4) + "-" + 
+        pad(term_start_date.mm, 2) + "-" + 
+        pad(term_start_date.dd, 2) + "T00:00"), info);
+    }
+    
+    schedule.download();
+  });
 }
 
 /// Callback functions for click event of injected <a> tag.

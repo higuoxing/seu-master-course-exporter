@@ -4,10 +4,10 @@ function initialize_storage() {
   let init_term_start_date = {
     yyyy: 2019,
     mm: 09,
-    dd: 09,
+    dd: 02,
   };
 
-  chrome.storage.sync.set({
+  chrome.storage.local.set({
     term_start_date: {
       yyyy: init_term_start_date.yyyy,
       mm: init_term_start_date.mm,
@@ -18,8 +18,8 @@ function initialize_storage() {
 
 /// Executed when this extension is installed.
 chrome.runtime.onInstalled.addListener(function () {
-  chrome.storage.sync.get("term_start_date", function(data) {
-    if (data.term_start_date) {
+  chrome.storage.local.get("term_start_date", function(data) {
+    if (data.term_start_date == null) {
       initialize_storage();
     }
   });

@@ -1,23 +1,5 @@
 let option_page = document.getElementById("options-div");
 
-/// If this extension is first time called, this method should
-/// be executed to initialize storage.
-function initialize_storage() {
-  let init_term_start_date = {
-    yyyy: 2019,
-    mm: 09,
-    dd: 09,
-  };
-
-  chrome.storage.sync.set({
-    term_start_date: {
-      yyyy: init_term_start_date.yyyy,
-      mm: init_term_start_date.mm,
-      dd: init_term_start_date.dd,
-    },
-  });
-}
-
 /// Construct input field. YYYY-MM-DD
 function construct_input_field(append_position, id, value) {
   let input_field = document.createElement("input");
@@ -81,7 +63,7 @@ function submit_button_cb() {
     dd: parseInt(dd),
   };
 
-  chrome.storage.sync.get("term_start_date", function(data) {
+  chrome.storage.local.get("term_start_date", function(data) {
     let start_date = data.term_start_date;
 
     if (start_date.yyyy == new_term_start_date.yyyy &&
@@ -89,7 +71,7 @@ function submit_button_cb() {
         start_date.dd == new_term_start_date.dd) {
       alert("Nothing is changed ...");
     } else {
-      chrome.storage.sync.set({
+      chrome.storage.local.set({
         term_start_date: {
           yyyy: new_term_start_date.yyyy,
           mm: new_term_start_date.mm,
@@ -104,18 +86,7 @@ function submit_button_cb() {
 
 /// Called to construct page.
 function construct_page() {
-  chrome.storage.sync.get("term_start_date", function(data) {
-    let start_date = data.term_start_date;
-    console.log(data);
-    if (start_date == null) {
-      initialize_storage();
-    }
-    // if (start_date.yyyy == null || start_date.mm == null || start_date.dd == null) {
-    //   initialize_storage();
-    // }
-  });
-
-  chrome.storage.sync.get("term_start_date", function(data) {
+  chrome.storage.local.get("term_start_date", function(data) {
     let start_date = data.term_start_date;
 
     construct_input_field(option_page, "yyyy", start_date.yyyy);
