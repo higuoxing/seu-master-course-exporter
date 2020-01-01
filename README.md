@@ -14,6 +14,11 @@
 8. Star 这个项目
 9. 按时上课哟
 
+#### How to Configure
+
+这个插件的导出时间是以开学后地一个上课周的周一为基准。如遇到时间不符的情况，请在浏览器右上角点击该插件的图标，选择 `Options` 编辑第一周周一的日期。
+
+
 #### Example
 
 ![](.github/images/profile.jpg)
