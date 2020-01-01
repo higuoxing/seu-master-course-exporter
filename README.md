@@ -10,7 +10,7 @@
 4. 选择 `Load upacked`
 5. 打开选课页面
 6. 点击 "下载 `.ics` 日历文件"
-7. 导入到任意日历应用 (`Google Calendar` 等)，具体导入步骤请参考 [Wiki](https://github.com/vgxbj/seu-master-course-exporter/wiki)，导入后即可在多个设备同步日历了，您可以利用日历应用创建提醒等。
+7. 导入到任意日历应用 (`Google Calendar` 等)，具体导入步骤请参考 [Wiki](https://github.com/vgxbj/seu-master-course-exporter/wiki)
 8. Star 这个项目
 9. 按时上课哟
 
