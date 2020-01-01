@@ -10,7 +10,7 @@
   "content_scripts": [
     {
       "matches": ["*://yjsxk.urp.seu.edu.cn/*"],
-      "js": ["content_script.js", "ics.dep.min.js", "ics.min.js"]
+      "js": ["content_script.js", "ics.dep.min.js", "ics.js"]
     }
   ],
   "options_page": "options.html",
