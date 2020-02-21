@@ -75,7 +75,8 @@ function add_course_to_schedule(schedule, date, course_info) {
     if (course_info.course_period[week] == "1") {
       schedule.addEvent(
         /* Subject */ course_info.prof_name + "@" + course_info.course_name,
-        /* Description */"课程: " + course_info.course_name + "\n" +
+        /* Description */"周次: " + week.toString() + "\n" +
+                         "课程: " + course_info.course_name + "\n" +
                          "地点: " + course_info.position + "\n" +
                          "教师: " + course_info.prof_name + "\n" +
                          "班级: " + course_info.class_name + "\n",
