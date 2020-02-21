@@ -2,9 +2,9 @@
 /// be executed to initialize storage.
 function initialize_storage() {
   let init_term_start_date = {
-    yyyy: 2019,
-    mm: 09,
-    dd: 02,
+    yyyy: 2020,
+    mm: 02,
+    dd: 24,
   };
 
   chrome.storage.local.set({
